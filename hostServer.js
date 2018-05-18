@@ -12,14 +12,22 @@ app.get('/', function(req, res) {
 
 
 app.get('/getData', function(req, res){
-  res.type('pdf');
+  res.type('pdf')
   res.sendFile(path.join(__dirname + '/data'+req.query.d),"binary")
 });
 
 app.get('/letters.js', function(req, res){
-  res.type('pdf');
-  res.sendFile(path.join(__dirname + '/letters.js'),"binary")
+  res.sendFile(path.join(__dirname + '/letters.js'))
 });
+
+app.get('/recognize.js', function(req, res){
+  res.sendFile(path.join(__dirname + '/recognize.js'))
+});
+
+app.get('/data.js', function(req, res){
+  res.sendFile(path.join(__dirname + '/data.js'))
+});
+
 
 app.listen(3000, '0.0.0.0', function() {//connect on other computers using network name/ip
     console.log('Listening to port:  ' + 3000);

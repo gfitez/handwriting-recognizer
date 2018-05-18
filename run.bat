@@ -1,0 +1,2 @@
+node hostServer.js
+pause

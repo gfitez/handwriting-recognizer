@@ -4,6 +4,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.10.0"> </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="letters.js"></script>
+    <script src="recognize.js"></script>
+    <!--<script src="data.js"></script>-->
 
     <!-- Place your code in the script tag below. You can also use an external .js file -->
     <script>
@@ -11,7 +13,7 @@
       canvas = document.getElementById('canvas');
       ctx = canvas.getContext('2d');
       requestLetterData(0);
-
+      runModel();
     })
 
 
