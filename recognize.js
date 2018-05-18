@@ -1,4 +1,4 @@
-function runModel(){
+
   const model = tf.sequential();
   model.add(tf.layers.conv2d({
   inputShape: [28, 28, 1],//28x28 image, 1 deep
@@ -44,7 +44,7 @@ function runModel(){
   loss: 'categoricalCrossentropy',//error between percentag ethat it will be and actual
   metrics: ['accuracy'],
   });
-
+function runModel(){
   const BATCH_SIZE = 64;
   const TRAIN_BATCHES = 100;//number of batches
 
@@ -54,16 +54,15 @@ function runModel(){
 
 
 
-  const batch = data.nextTrainBatch(BATCH_SIZE);
+  const batch = getRandomBatch(BATCH_SIZE);
 
   for (let i = 0; i < TRAIN_BATCHES; i++) {
-    const batch = data.nextTrainBatch(BATCH_SIZE);
-
+    const batch = getRandomBatch(BATCH_SIZE);
     let testBatch;
     let validationData;
     // Every few batches test the accuracy of the mode.
     if (i % TEST_ITERATION_FREQUENCY === 0) {
-      testBatch = data.nextTestBatch(TEST_BATCH_SIZE);
+      testBatch = getRandomBatch(TEST_BATCH_SIZE);
       validationData = [
         testBatch.xs.reshape([TEST_BATCH_SIZE, 28, 28, 1]), testBatch.labels
       ];
@@ -71,7 +70,7 @@ function runModel(){
 
     // The entire dataset doesn't fit into memory so we call fit repeatedly
     // with batches.
-    const history = await model.fit(
+    const history = model.fit(
         batch.xs.reshape([BATCH_SIZE, 28, 28, 1]),
         batch.labels,
         {
@@ -80,10 +79,28 @@ function runModel(){
           epochs: 1
         });
 
-    const loss = history.history.loss[0];
-    const accuracy = history.history.acc[0];
+      //const loss = history.history.loss[0];
+    //const accuracy = history.history.acc[0];
 
     // ... plotting code ...
-    console.log(history.history.loss)
+    //console.log(history.history.loss)
   }
+}
+
+
+function getRandomBatch(amount){
+  var batchImagesArray = [];
+  var batchLabelsArray = [];
+
+  for (let i = 0; i < amount; i++) {
+    var x =getRandomLetter();
+    //console.log(x.letter)
+    batchImagesArray[i]=(x.letter);
+    batchLabelsArray.push(x.i);
+  }
+
+  const xs = tf.tensor2d(batchImagesArray);
+  const labels = tf.tensor(batchLabelsArray);
+
+  return {xs, labels};
 }

@@ -29,6 +29,6 @@ app.get('/data.js', function(req, res){
 });
 
 
-app.listen(3000, '0.0.0.0', function() {//connect on other computers using network name/ip
-    console.log('Listening to port:  ' + 3000);
+app.listen(8080, '0.0.0.0', function() {//connect on other computers using network name/ip
+    console.log('Listening to port:  ' + 8080);
 });

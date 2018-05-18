@@ -9,9 +9,8 @@ function requestLetterData(i){
 
     // if you want to access the bytes:
     letters[i]= new Uint8Array(arrayBuffer);
-    console.log(i)
     if(i<9){requestLetterData(i+1)}else{
-      console.log(1)
+
     };
   },
   oReq.send();
@@ -56,7 +55,6 @@ function getNthLetter(letter,index){
 }
 
 function drawArray(arr){
-
   for(var i=0;i<28;i+=1){
     for(var j=0;j<28;j++){
 
@@ -65,4 +63,17 @@ function drawArray(arr){
       ctx.fillRect(i*5,j*5,5,5 )
     }
   }
+}
+function serialize2d(arr){
+  temp=[];
+  for(var i=0;i<28;i++){
+    for(var j=0;j<28;j++){
+      temp.push(arr[i][j])
+    }
+  }
+  return temp;
+}
+function getRandomLetter(){
+  var index=Math.floor(Math.random()*10);
+  return {i:index, letter:serialize2d(getNthLetter(index,Math.floor(Math.random()*1000)))}
 }
