@@ -3,7 +3,7 @@ var app = express();
 var http = require('http');
 var fs = require('fs');
 var path = require('path');
-require("jquery")
+
 
 
 app.get('/', function(req, res) {
@@ -26,6 +26,14 @@ app.get('/recognize.js', function(req, res){
 
 app.get('/data.js', function(req, res){
   res.sendFile(path.join(__dirname + '/data.js'))
+});
+
+app.get('/basicDemo.html', function(req, res){
+  res.sendFile(path.join(__dirname + '/basicDemo.html'))
+});
+
+app.get('/training.html', function(req, res){
+  res.sendFile(path.join(__dirname + '/training.html'))
 });
 
 

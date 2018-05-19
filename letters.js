@@ -54,7 +54,7 @@ function getNthLetter(letter,index){
   return arr;
 }
 
-function drawArray(arr){
+function drawArray2d(arr){
   for(var i=0;i<28;i+=1){
     for(var j=0;j<28;j++){
 
@@ -63,6 +63,29 @@ function drawArray(arr){
       ctx.fillRect(i*5,j*5,5,5 )
     }
   }
+}
+function drawArray1d(arr){
+  for(var i=0;i<28;i+=1){
+    for(var j=0;j<28;j++){
+      ctx.fillStyle=rgbToHex(255-arr[i*28+j],255-arr[i*28+j],255-arr[i*28+j]);
+      if(arr[i*28+j]>0){
+        ctx.fillRect(i*5,j*5,5,5 )
+      }
+
+    }
+  }
+
+
+}
+function copyCanvas(){
+  dataUrl = canvas.toDataURL(),
+    imageFoo = document.createElement('img');
+  imageFoo.src = dataUrl;
+
+  imageFoo.style.width = '100px';
+  imageFoo.style.height = '100px';
+
+  $("#demos")[0].appendChild(imageFoo);
 }
 function serialize2d(arr){
   temp=[];
@@ -75,5 +98,14 @@ function serialize2d(arr){
 }
 function getRandomLetter(){
   var index=Math.floor(Math.random()*10);
-  return {i:index, letter:serialize2d(getNthLetter(index,Math.floor(Math.random()*1000)))}
+  var temp=[0,0,0,0,0,0,0,0,0,0];
+  temp[index]=1;
+  return {i:temp, letter:serialize2d(getNthLetter(index,Math.floor(Math.random()*1000)))}
+}
+function getMaxIndex(arr){
+  var max=0;
+  for(var i=0;i<arr.length;i++){
+    if(arr[i]>arr[max])max=i;
+  }
+  return max;
 }
