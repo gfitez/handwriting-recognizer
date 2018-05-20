@@ -1,1 +1,110 @@
-aoeutnaoe
+<div class="row" style="margin:20px">
+  <div class="col-3">
+    <button class="btn btn-lg btn-info" onclick="grapher.drawChart()">ResetChart</button>
+  </div>
+  <div class="col-4">
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+      <button class="btn btn-success btn-lg" onclick="grapher.startGrapher()">Start</button>
+      <button class="btn btn-danger btn-lg" onclick="grapher.stopGrapher()">Stop</button>
+    </div>
+  </div>
+  <div class="col-5">
+    <div class="input-group mb-3 input-group-lg">
+      <div class="input-group-prepend">
+        <span class="input-group-text" >Batches Per Iteration:</span>
+      </div>
+      <input type="text" id="batches-per-iteration" value=10></input>
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary btn-info" type="button" onclick="grapher.getAndSetBatchesPerIteration()">Set</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<canvas id="myChart" width=300></canvas>
+
+<script>
+var grapher={
+  chartConfig:undefined,
+
+  getAndSetBatchesPerIteration:function (){
+    batchesPerIteration=parseInt($("#batches-per-iteration").val());
+  },
+
+  chart:undefined,
+  drawChart:function (){
+    if(typeof this.chart!="undefined")this.chart.destroy();
+    this.chartConfig={
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Accuracy',
+                data: [],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        min:0,
+                        max:100,
+                    }
+                }]
+            },
+            animation:{
+              duration:0,
+            }
+        }
+    }
+    var ctx = document.getElementById("myChart").getContext('2d');
+    this.chart = new Chart(ctx, this.chartConfig);
+  },
+  startGrapher:function (){
+    this.runningGrapher=true;
+    this.oneIteration(0);
+  },
+  stopGrapher:function (){
+    this.runningGrapher=false;
+  },
+  i:0,
+  accuracy:[0.1],
+  labels:[0],
+
+  batchesPerIteration:5,
+  runningGrapher:false,
+  oneIteration:function(i){
+    trainer.train(batchesPerIteration);
+    trainer.updateStats();
+    if(trainer.history){
+      this.accuracy.push(trainer.history.history.acc[0]);
+      this.labels.push(this.labels[this.labels.length-1]+batchesPerIteration);
+
+      this.chartConfig.data.labels.push(trainer.totalIterations);
+      this.chartConfig.data.datasets[0].data.push(trainer.history.history.acc[0]*100);
+    }
+    this.chart.update();
+    if(this.runningGrapher){setTimeout("grapher.oneIteration("+(i+1)+")",10)};
+  }
+}
+
+grapher.getAndSetBatchesPerIteration();
+grapher.drawChart();
+</script>

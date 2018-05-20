@@ -12,11 +12,12 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
 
     <!-- Place your code in the script tag below. You can also use an external .js file -->
     <script>
     $("document").ready(function(){
-
+      trainer.initializeModel();
       requestLetterData(0);
       $("#body-container").load("basicDemo.html")
     })
@@ -31,18 +32,21 @@
 
 
         <div class="col-2">
-            Total Iterations:<span>100</span>
+            Total Iterations: <span id="total-iterations">N/A</span>
         </div>
 
         <div class="col-2">
-            Last Accuracy:<span>100</span><br>
-            Last Loss:<span>100</span>
+            Last Accuracy: <span id="accuracy">N/A</span><br>
+            Last Loss: <span id="loss">N/A</span>
         </div>
 
 
         <div class="col-2">
-            Batch Size:<span>100</span><br>
-            Learning Rate:<span>100</span>
+            Batch Size: <span id="batch-size">N/A</span><br>
+            Learning Rate: <span id="learning-rate">N/A</span>
+        </div>
+        <div class="col-2">
+          <button class="btn btn-danger" onclick="trainer.initializeModel()">Reset Model</button>
         </div>
 
     </div>

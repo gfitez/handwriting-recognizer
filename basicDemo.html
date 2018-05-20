@@ -1,12 +1,12 @@
 <div>
-  <button class="btn btn-primary" onclick="setTimeout(train(100));">Train 100 cycles</button>
+  <button class="btn btn-primary" onclick="setTimeout(trainer.train(100));">Train 100 cycles</button>
   <button class="btn btn-info" onclick="demo(10)">Demo 10 Numbers</button>
   <button class="btn btn-danger" onclick="clearDemo()">Clear Demos</button>
 </div>
 <div id="body-container">
 </div>
 
-<canvas id="canvas" class="invisible"></canvas>
+<canvas id="canvas" class="invisible" width=140 height=140></canvas>
 <div id="demos"></div>
 <script>
 canvas = document.getElementById('canvas');

@@ -102,6 +102,7 @@ function getRandomLetter(){
   temp[index]=1;
   return {i:temp, letter:serialize2d(getNthLetter(index,Math.floor(Math.random()*1000)))}
 }
+
 function getMaxIndex(arr){
   var max=0;
   for(var i=0;i<arr.length;i++){
