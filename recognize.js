@@ -1,9 +1,9 @@
 var trainer={
   model:tf.sequential(),
-  BATCH_SIZE:200,//64
-  TEST_BATCH_SIZE:1000,
+  BATCH_SIZE:50,//64
+  TEST_BATCH_SIZE:50,
   TEST_ITERATION_FREQUENCY:5,//every 5 batches, test accuracy of the model
-  LEARNING_RATE: 0.0002,//0.00075
+  LEARNING_RATE: 0.002,//0.00075
   optimizer:undefined,
   history:undefined,
 

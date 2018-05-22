@@ -31,6 +31,7 @@ function getNthLetter(letter,index){
     temp.push([])
     for(var j=28-1;j>=0;j--){
       temp[i][j]=(letters[letter][i*28+index*28*28+j]);
+      if(temp[i][j]!=0)temp[i][j]=255;
     }
   }
 

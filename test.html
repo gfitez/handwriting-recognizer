@@ -1,0 +1,62 @@
+<canvas id="drawCanvas" width=280 height=280  style="border:1px solid black; width:280; height:280" onmousedown="drawing=true" onmouseup="drawing=false;"></canvas>
+
+<script>
+var drawCanvas=document.getElementById("drawCanvas");
+
+var drawCtx=drawCanvas.getContext("2d");
+
+function getMousePos(canvas, evt) {
+   var rect = canvas.getBoundingClientRect();
+   return {
+     x: evt.clientX - rect.left,
+     y: evt.clientY - rect.top
+   };
+ }
+var mousePos;
+ drawCanvas.addEventListener('mousemove', function(evt) {
+   mousePos = getMousePos(drawCanvas, evt);
+ }, false);
+var lastCoords;
+var drawing=false;
+function drawer(){
+  if(lastCoords==undefined)lastCoords=mousePos;
+  if(drawing){
+    drawCtx.strokeStyle="black"
+    drawCtx.lineWidth=40;
+    drawCtx.lineCap="round";
+    drawCtx.beginPath();
+    drawCtx.moveTo(lastCoords.x,lastCoords.y);
+    drawCtx.lineTo(mousePos.x,mousePos.y);
+    drawCtx.stroke();
+
+  }
+  lastCoords=mousePos;
+
+}
+setInterval(drawer,1);
+function getPx(x,y){
+  return drawCtx.getImageData(x,y,1,1).data[3]
+}
+async function guessImage(){
+  $("#drawCanvas").css("width",28);
+  $("#drawCanvas").css("height",28);
+  var convert=new Float32Array(784);
+  var arrI=0;
+  for(var i=0;i<28;i++){
+    for(var j=0;j<28;j++){
+      //loop through squares
+
+      convert.set([getPx(i*10,j*10)],arrI);
+      arrI++;
+    }
+
+  }
+  $("#drawCanvas").css("width",280);
+  $("#drawCanvas").css("height",280);
+  var x=tf.tensor2d(convert, [1, 784]);
+  return getMaxIndex(await trainer.model.predict(x.reshape([1, 28, 28, 1])).data());
+}
+function clearCanvas(){
+  drawCtx.clearRect(0,0,280,280)
+}
+</script>

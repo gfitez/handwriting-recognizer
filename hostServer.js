@@ -35,8 +35,11 @@ app.get('/basicDemo.html', function(req, res){
 app.get('/training.html', function(req, res){
   res.sendFile(path.join(__dirname + '/training.html'))
 });
+app.get('/test.html', function(req, res){
+  res.sendFile(path.join(__dirname + '/test.html'))
+});
 
 
-app.listen(8080, '0.0.0.0', function() {//connect on other computers using network name/ip
+app.listen(8000, '0.0.0.0', function() {//connect on other computers using network name/ip
     console.log('Listening to port:  ' + 8080);
 });
