@@ -40,6 +40,6 @@ app.get('/test.html', function(req, res){
 });
 
 
-app.listen(8000, '0.0.0.0', function() {//connect on other computers using network name/ip
-    console.log('Listening to port:  ' + 8080);
+app.listen(1010, '0.0.0.0', function() {//connect on other computers using network name/ip
+    console.log('Listening to port:  ' + 1010);
 });

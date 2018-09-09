@@ -1,9 +1,9 @@
 var trainer={
   model:tf.sequential(),
-  BATCH_SIZE:50,//64
-  TEST_BATCH_SIZE:50,
+  BATCH_SIZE:100,//50
+  TEST_BATCH_SIZE:500,
   TEST_ITERATION_FREQUENCY:5,//every 5 batches, test accuracy of the model
-  LEARNING_RATE: 0.002,//0.00075
+  LEARNING_RATE: 0.002,//0.002
   optimizer:undefined,
   history:undefined,
 
@@ -21,7 +21,7 @@ var trainer={
     filters: 8,//number of filters
     strides: 1,//move window one over each time
     activation: 'relu',
-    kernelInitializer: 'VarianceScaling'
+    kernelInitializer: 'RandomNormal'
     }));
 
     model.add(tf.layers.maxPooling2d({//downsample previous layer
@@ -34,7 +34,7 @@ var trainer={
       filters: 16,
       strides: 1,
       activation: 'relu',
-      kernelInitializer: 'VarianceScaling'
+      kernelInitializer: 'RandomNormal'
     }));
 
     model.add(tf.layers.maxPooling2d({//same as efore
@@ -46,7 +46,7 @@ var trainer={
 
     model.add(tf.layers.dense({
     units: 10,//0-9
-    kernelInitializer: 'VarianceScaling',
+    kernelInitializer: 'RandomNormal',
     activation: 'softmax'//probability distribution
     }));
 
@@ -82,12 +82,12 @@ var trainer={
   },
 
   trainCycle:async function (i){
-    const batch = getRandomBatch(this.BATCH_SIZE);
+    const batch = getRandomSequentialBatch(this.BATCH_SIZE);
 
     // Every few batches test the accuracy of the mode.
     if (i % this.TEST_ITERATION_FREQUENCY === 0) {
       console.log(i)
-      testBatch = getRandomBatch(this.TEST_BATCH_SIZE);
+      testBatch = getRandomSequentialBatch(this.TEST_BATCH_SIZE);
       validationData = [
         testBatch.xs.reshape([this.TEST_BATCH_SIZE, 28, 28, 1]), testBatch.labels
       ];
@@ -117,7 +117,20 @@ var trainer={
     }
 
     $("#total-iterations").html((""+this.totalIterations).substring(0,numLength));
+  },
+
+  hasBecomeRetarded:async function(){
+    var answers=[0,0,0,0,0,0,0,0,0,0]
+    for(let i=0;i<100;i++){
+      var x=getRandomBatch(1);
+      answers[getMaxIndex(await trainer.model.predict(x.xs.reshape([1, 28, 28, 1])).data())]++;
+    }
+
+  for(var i=0;i<answers.length;i++){
+    if(answers[i]==0)return true;
   }
+  return false;
+}
 }
 
 function getRandomBatch(amount){
@@ -128,6 +141,25 @@ function getRandomBatch(amount){
 
   for (let i = 0; i < amount; i++) {
     var x =getRandomLetter();
+    //console.log(x.letter)
+    batchImagesArray.set(x.letter, i * IMAGE_SIZE);
+    batchLabelsArray.set(x.i, i * NUM_CLASSES);
+  }
+
+  const xs = tf.tensor2d(batchImagesArray, [amount, IMAGE_SIZE]);
+  const labels = tf.tensor2d(batchLabelsArray, [amount, NUM_CLASSES]);
+
+  return {xs, labels};
+
+}
+function getRandomSequentialBatch(amount){
+  const IMAGE_SIZE = 784;
+  const NUM_CLASSES = 10;
+  var batchImagesArray = new Float32Array(amount * IMAGE_SIZE);
+  var batchLabelsArray = new Uint8Array(amount * NUM_CLASSES);
+
+  for (let i = 0; i < amount; i++) {
+    var x =getRandomLetterSpecified(i%10);
     //console.log(x.letter)
     batchImagesArray.set(x.letter, i * IMAGE_SIZE);
     batchLabelsArray.set(x.i, i * NUM_CLASSES);

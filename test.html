@@ -1,5 +1,8 @@
 <canvas id="drawCanvas" width=280 height=280  style="border:1px solid black; width:280; height:280" onmousedown="drawing=true" onmouseup="drawing=false;"></canvas>
-
+<button onclick="clearCanvas()" class="btn">Clear</button>
+<button onclick="writeGuess()" class="btn">Guess</button>
+<h1 id="guess"></h1>
+<div id="image"></div>
 <script>
 var drawCanvas=document.getElementById("drawCanvas");
 
@@ -18,11 +21,13 @@ var mousePos;
  }, false);
 var lastCoords;
 var drawing=false;
+  var borderWidth=20;
 function drawer(){
+
   if(lastCoords==undefined)lastCoords=mousePos;
-  if(drawing){
+  if(drawing && mousePos.x>borderWidth && mousePos.x<280-borderWidth && mousePos.y>borderWidth && mousePos.y<280-borderWidth){
     drawCtx.strokeStyle="black"
-    drawCtx.lineWidth=40;
+    drawCtx.lineWidth=35;
     drawCtx.lineCap="round";
     drawCtx.beginPath();
     drawCtx.moveTo(lastCoords.x,lastCoords.y);
@@ -54,9 +59,17 @@ async function guessImage(){
   $("#drawCanvas").css("width",280);
   $("#drawCanvas").css("height",280);
   var x=tf.tensor2d(convert, [1, 784]);
-  return getMaxIndex(await trainer.model.predict(x.reshape([1, 28, 28, 1])).data());
+  return await getMaxIndex(await trainer.model.predict(x.reshape([1, 28, 28, 1])).data());
+}
+async function writeGuess(){
+  $("#guess").html(await guessImage())
 }
 function clearCanvas(){
   drawCtx.clearRect(0,0,280,280)
+  drawCtx.lineWidth=1;
+  drawCtx.strokeRect(borderWidth,borderWidth,280-2*borderWidth,280-2*borderWidth);
 }
+
+
+clearCanvas()
 </script>

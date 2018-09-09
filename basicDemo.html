@@ -1,5 +1,5 @@
 <div>
-  <button class="btn btn-primary" onclick="setTimeout(trainer.train(100));">Train 100 cycles</button>
+  <button class="btn btn-primary" onclick="demoTrain()">Train 25 cycles</button>
   <button class="btn btn-info" onclick="demo(10)">Demo 10 Numbers</button>
   <button class="btn btn-danger" onclick="clearDemo()">Clear Demos</button>
 </div>
@@ -11,4 +11,14 @@
 <script>
 canvas = document.getElementById('canvas');
 ctx = canvas.getContext('2d');
+
+
+async function demoTrain(){
+  await trainer.train(25);
+  if(await trainer.hasBecomeRetarded()){
+    console.log("Restarting model...")
+    trainer.initializeModel();
+    demoTrain();
+  }
+}
 </script>
